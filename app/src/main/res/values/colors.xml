@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#ffb74d</color>
+    <color name="colorPrimaryDark">#c88719</color>
+    <color name="colorPrimaryLight">#ffe97d</color>
+
+    <color name="colorSecondary">#795548</color>
+    <color name="colorSecondaryDark">#4b2c20</color>
+    <color name="colorSecondaryLight">#a98274</color>
+
+    <color name="colorOnPrimary">#000000</color>
+    <color name="colorOnSecondary">#ffffff</color>
+
+    <color name="toolbarIconColor">#FFFFFF</color>
+    <color name="loginPageBackgroundColor">#FFFFFF</color>
+    <color name="productGridBackgroundColor">#FFFFFF</color>
+</resources>
