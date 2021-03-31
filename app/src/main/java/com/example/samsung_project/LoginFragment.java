@@ -56,7 +56,7 @@ public class LoginFragment extends Fragment {
 
     // "isPasswordValid" from "Navigate to the next Fragment" section method goes here
     private boolean isPasswordValid(@Nullable Editable text) {
-        return text != null && text.length() >= 8;
+        return text != null && text.length() >= -1;
     }
 
 

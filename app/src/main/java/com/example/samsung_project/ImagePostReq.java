@@ -43,8 +43,13 @@ public class ImagePostReq extends AsyncTask<String, Integer, String> {
     OkHttpClient client = new OkHttpClient.Builder()
             .build();
     String post1(String url, String json) throws IOException {
-
-        HttpUrl localUrl = HttpUrl.parse(url);
+        System.out.println(url);
+        HttpUrl localUrl = new HttpUrl.Builder()
+                .scheme("http")
+                .host(url)
+                .addPathSegment("image")
+                .build();
+        System.out.println(localUrl);
         RequestBody body = RequestBody.create(JSON, json);
         Request request = new Request.Builder()
                 .url(localUrl)
