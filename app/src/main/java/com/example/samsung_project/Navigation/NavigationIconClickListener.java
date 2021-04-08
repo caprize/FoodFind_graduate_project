@@ -1,4 +1,4 @@
-package com.example.samsung_project;
+package com.example.samsung_project.Navigation;
 
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
@@ -31,7 +31,7 @@ public class NavigationIconClickListener implements OnClickListener {
         this(context, sheet, interpolator, (Drawable)null, (Drawable)null);
     }
 
-    NavigationIconClickListener(Context context, View sheet, @Nullable Interpolator interpolator, @Nullable Drawable openIcon, @Nullable Drawable closeIcon) {
+    public NavigationIconClickListener(Context context, View sheet, @Nullable Interpolator interpolator, @Nullable Drawable openIcon, @Nullable Drawable closeIcon) {
         this.animatorSet = new AnimatorSet();
         this.backdropShown = false;
         this.context = context;

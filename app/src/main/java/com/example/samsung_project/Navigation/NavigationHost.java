@@ -1,4 +1,4 @@
-package com.example.samsung_project;
+package com.example.samsung_project.Navigation;
 
 import androidx.fragment.app.Fragment;
 

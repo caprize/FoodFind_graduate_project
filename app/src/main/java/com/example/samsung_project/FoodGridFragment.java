@@ -22,25 +22,23 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 
-import com.example.samsung_project.image.ImageBody;
-import com.example.samsung_project.image.ImagePost;
+import com.example.samsung_project.Navigation.NavigationHost;
+import com.example.samsung_project.Navigation.NavigationIconClickListener;
+import com.example.samsung_project.image.ImagePostReq;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 
 import java.io.IOException;
+import java.util.concurrent.Executor;
 
 import okhttp3.MediaType;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 import static android.app.Activity.RESULT_OK;
 
 public class FoodGridFragment extends Fragment {
     static final int GALLERY_REQUEST = 1;
+    public String res = null;
     public static final MediaType String = MediaType.get("application/string; charset=utf-8");
     private void setUpToolbar(View view) {
         Toolbar toolbar = view.findViewById(R.id.app_bar);
@@ -88,9 +86,6 @@ public class FoodGridFragment extends Fragment {
 
         // Set up the toolbar
         setUpToolbar(view);
-//        RecipeGet recipeGet = new RecipeGet();
-//        String url = recipeGet.prep_url("baklava");
-//        new RecipeGet().execute(url);
 
 
 
@@ -113,8 +108,7 @@ public class FoodGridFragment extends Fragment {
         super.onActivityResult(requestCode, resultCode, imageReturnedIntent);
 
         Bitmap bitmap = null;
-        String url = "10.0.0.2";
-//        String url = "http://127.0.0.1:8000//model/";
+        String url = "10.0.2.2";
         Context context = getContext();
         switch(requestCode) {
             case GALLERY_REQUEST:
@@ -124,39 +118,22 @@ public class FoodGridFragment extends Fragment {
                         bitmap = MediaStore.Images.Media.getBitmap(context.getContentResolver(), selectedImage);
                         ImagePostReq image = new ImagePostReq();
                         String req = image.PrepImage(bitmap);
-                        ImageBody body = new ImageBody();
-//                        body.setBody(req);
-//                        Retrofit retrofit = new Retrofit.Builder()
-////                                .baseUrl("https://ptsv2.com/t/x5xe8-1617222540/")
-////                                .baseUrl("http://httpbin.org/")
-//                                .baseUrl("http://192.168.0.103:8000/")
-//                                .addConverterFactory(GsonConverterFactory.create())
-//                                .build();
-//                        ImagePost api = retrofit.create(ImagePost.class);
-//                        Call<ImageBody> call = api.sendImage(body);
-//                        call.enqueue(new Callback<ImageBody>() {
-//                                         @Override
-//                                         public void onResponse(Call<ImageBody> call, Response<ImageBody> response) {
-//                                             if (response.isSuccessful()) {
-//                                                 System.out.println("YES");
-//                                                 System.out.println(response.raw());
-//                                             } else {
-//                                                 System.out.println(response.code());
-//                                                 System.out.println("No(");
-//                                             }
-//                                         }
-//
-//                                         @Override
-//                                         public void onFailure(Call<ImageBody> call, Throwable t) {
-//                                             Toast.makeText(context.getApplicationContext(), "onFailure called ", Toast.LENGTH_SHORT).show();
-//                                             System.out.println(call.);
-//                                             call.cancel();
-//                                         }
-//
-//                                     });
-                        String response = null;
-                        new ImagePostReq().execute(url, req,response);
-                        System.out.println(response);
+                        final String[] response = {null};
+//                        API api = new API();
+//                        api.postimage(req,context);
+                        Runnable task = () -> {
+                            try {
+                                response[0] = image.post1(url,req);
+                                res = response[0];
+                                ((NavigationHost) getActivity()).navigateTo(new FoodChoice(res), false);
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        };
+                        Thread thread = new Thread(task);
+                        thread.start();
+//                        new ImagePostReq().execute(url, req,response);
+
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
