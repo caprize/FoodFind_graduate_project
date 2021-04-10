@@ -1,5 +1,7 @@
 package com.example.samsung_project.Network;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 
 import java.io.IOException;
@@ -12,6 +14,7 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 
 public class RecipeGet extends AsyncTask<String, Integer, String> {
+    private String toBitmap;
     public static final MediaType Json
             = MediaType.get("application/json; charset=utf-8");
     OkHttpClient client = new OkHttpClient();
@@ -53,12 +56,21 @@ public class RecipeGet extends AsyncTask<String, Integer, String> {
         return baseurl+name;
     }
 
+    public Bitmap prep_image(){
+        byte[] bytes_data = toBitmap.getBytes();
+        Bitmap bm = BitmapFactory.decodeByteArray(bytes_data,0,bytes_data.length);
+        return bm;
+    }
+
 
     @Override
     protected String doInBackground(String... strings) {
         String result = null;
         try {
-            result = post(strings[0],strings[1]);
+            if (strings[2]=="post_image")
+                result = post_GetImage(strings[0],strings[1]);
+            else if (strings[2] =="get_recipe")
+                result = postRecipe(strings[0],strings[1]);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -68,5 +80,13 @@ public class RecipeGet extends AsyncTask<String, Integer, String> {
     protected void onPostExecute(String response) {
 
         super.onPostExecute(response);
+    }
+
+    public String getToBitmap() {
+        return toBitmap;
+    }
+
+    public void setToBitmap(String toBitmap){
+        this.toBitmap=toBitmap;
     }
 }
