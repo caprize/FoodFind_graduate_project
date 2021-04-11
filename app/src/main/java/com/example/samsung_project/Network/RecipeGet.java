@@ -14,7 +14,7 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 
 public class RecipeGet extends AsyncTask<String, Integer, String> {
-    private String toBitmap;
+    private  byte[] toBitmap;
     public static final MediaType Json
             = MediaType.get("application/json; charset=utf-8");
     OkHttpClient client = new OkHttpClient();
@@ -35,7 +35,7 @@ public class RecipeGet extends AsyncTask<String, Integer, String> {
         return response.body().string();
     }
 
-    public String post_GetImage(String url, String json) throws IOException {
+    public byte[] post_GetImage(String url, String json) throws IOException {
         HttpUrl localUrl = new HttpUrl.Builder()
                 .scheme("http")
                 .host(url)
@@ -47,7 +47,7 @@ public class RecipeGet extends AsyncTask<String, Integer, String> {
                 .post(body)
                 .build();
         Response response = client.newCall(request).execute();
-        return response.body().string();
+        return response.body().bytes();
     }
 
 
@@ -57,8 +57,9 @@ public class RecipeGet extends AsyncTask<String, Integer, String> {
     }
 
     public Bitmap prep_image(){
-        byte[] bytes_data = toBitmap.getBytes();
-        Bitmap bm = BitmapFactory.decodeByteArray(bytes_data,0,bytes_data.length);
+
+        System.out.println(getToBitmap());
+        Bitmap bm = BitmapFactory.decodeByteArray(getToBitmap(),0,getToBitmap().length);
         return bm;
     }
 
@@ -68,7 +69,8 @@ public class RecipeGet extends AsyncTask<String, Integer, String> {
         String result = null;
         try {
             if (strings[2]=="post_image")
-                result = post_GetImage(strings[0],strings[1]);
+//                result = post_GetImage(strings[0],strings[1]);
+                System.out.println("ahah");
             else if (strings[2] =="get_recipe")
                 result = postRecipe(strings[0],strings[1]);
         } catch (IOException e) {
@@ -82,11 +84,11 @@ public class RecipeGet extends AsyncTask<String, Integer, String> {
         super.onPostExecute(response);
     }
 
-    public String getToBitmap() {
+    public byte[] getToBitmap() {
         return toBitmap;
     }
 
-    public void setToBitmap(String toBitmap){
+    public void setToBitmap(byte[] toBitmap){
         this.toBitmap=toBitmap;
     }
 }

@@ -5,17 +5,12 @@ import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.samsung_project.FoodChoice;
-import com.example.samsung_project.Navigation.NavigationHost;
 import com.example.samsung_project.Network.RecipeGet;
 import com.example.samsung_project.R;
 
@@ -40,19 +35,27 @@ public class DishAdapter extends RecyclerView.Adapter<DishAdapter.DishViewHolder
 
     public Bitmap getImage(int position){
         String req = dishesList.get(position);
-        String[] response=null;
+        byte[][] response = {new byte[0]};
         String method = "post_image";
         RecipeGet imageGet = new RecipeGet();
         String url = "10.0.2.2";
-        String result[] = null;
         Runnable task = () -> {
             try {
+                System.out.println("here");
                 response[0] = imageGet.post_GetImage(url,req);
+                System.out.println(response[0]);
                 sleep(1000);
             } catch (IOException | InterruptedException e) {
                 e.printStackTrace();
             }
         };
+        Thread thread = new Thread(task);
+        thread.start();
+        try {
+            sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         if (response[0]!=null) {
             imageGet.setToBitmap(response[0]);
             bm = imageGet.prep_image();
@@ -64,7 +67,7 @@ public class DishAdapter extends RecyclerView.Adapter<DishAdapter.DishViewHolder
     @NonNull
     @Override
     public DishViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new DishViewHolder(inflater.inflate(R.layout.dishe_item,parent,false));
+        return new DishViewHolder(inflater.inflate(R.layout.dishes_item,parent,false));
     }
 
     @Override
