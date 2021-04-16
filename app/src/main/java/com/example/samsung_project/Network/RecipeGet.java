@@ -4,7 +4,10 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 
+import com.google.gson.Gson;
+
 import java.io.IOException;
+import java.util.Dictionary;
 
 import okhttp3.HttpUrl;
 import okhttp3.MediaType;
@@ -18,9 +21,9 @@ public class RecipeGet extends AsyncTask<String, Integer, String> {
     public static final MediaType Json
             = MediaType.get("application/json; charset=utf-8");
     OkHttpClient client = new OkHttpClient();
+    Gson gson;
 
-
-    public String postRecipe(String url, String json) throws IOException {
+    public Dictionary postRecipe(String url, String json) throws IOException {
         HttpUrl localUrl = new HttpUrl.Builder()
                 .scheme("http")
                 .host(url)
@@ -32,7 +35,7 @@ public class RecipeGet extends AsyncTask<String, Integer, String> {
                 .post(body)
                 .build();
         Response response = client.newCall(request).execute();
-        return response.body().string();
+        return gson.fromJson(response.body().toString(), Dictionary.class);
     }
 
     public byte[] post_GetImage(String url, String json) throws IOException {
@@ -57,8 +60,6 @@ public class RecipeGet extends AsyncTask<String, Integer, String> {
     }
 
     public Bitmap prep_image(){
-
-        System.out.println(getToBitmap());
         Bitmap bm = BitmapFactory.decodeByteArray(getToBitmap(),0,getToBitmap().length);
         return bm;
     }
@@ -68,27 +69,23 @@ public class RecipeGet extends AsyncTask<String, Integer, String> {
     protected String doInBackground(String... strings) {
         String result = null;
         try {
-            if (strings[2]=="post_image")
+            if (strings[2] == "post_image")
 //                result = post_GetImage(strings[0],strings[1]);
                 System.out.println("ahah");
-            else if (strings[2] =="get_recipe")
-                result = postRecipe(strings[0],strings[1]);
-        } catch (IOException e) {
+            else if (strings[2] == "get_recipe")
+                System.out.println("ahah");
+
+        } catch (Exception e) {
             e.printStackTrace();
         }
-        System.out.println(result);
         return result;
-    }
-    protected void onPostExecute(String response) {
-
-        super.onPostExecute(response);
-    }
-
-    public byte[] getToBitmap() {
-        return toBitmap;
     }
 
     public void setToBitmap(byte[] toBitmap){
         this.toBitmap=toBitmap;
+    }
+
+    public byte[] getToBitmap() {
+        return toBitmap;
     }
 }

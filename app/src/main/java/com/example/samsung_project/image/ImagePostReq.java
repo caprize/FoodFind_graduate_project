@@ -13,6 +13,8 @@ import java.io.ByteArrayOutputStream;
 
 
 import java.io.IOException;
+import java.nio.ByteBuffer;
+import java.nio.IntBuffer;
 
 import okhttp3.HttpUrl;
 import okhttp3.MediaType;
@@ -30,7 +32,7 @@ public class ImagePostReq extends AsyncTask<String, Integer, String> {
 
     OkHttpClient client = new OkHttpClient.Builder()
             .build();
-    public String post1(String url, String json) throws IOException {
+    public String post1(String url, byte[] json) throws IOException {
         HttpUrl localUrl = new HttpUrl.Builder()
                 .scheme("http")
                 .host(url)
@@ -47,22 +49,36 @@ public class ImagePostReq extends AsyncTask<String, Integer, String> {
 
 
 
-    public String PrepImage(Bitmap image) {
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        image.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-        byte[] imageBytes = baos.toByteArray();
-        String encodedImage = Base64.encodeToString(imageBytes, Base64.DEFAULT);
-        return encodedImage;
+    public byte[] PrepImage(Bitmap image) {
+        int x = image.getWidth();
+        int y = image.getHeight();
+//        image.getPixels(intArray, 0, x, 0, 0, x, y);
+        int[] intArray = new int[x * y];
+
+        image.getPixels(intArray, 0, x,
+                0, 0, x, y);
+        for (int i=0;i<x*y;i++){
+            intArray[i]=intArray[i] /(-200);
+            System.out.println(intArray[i]);
+        }
+        ByteBuffer byteBuffer = ByteBuffer.allocate(intArray.length * 4);
+        IntBuffer intBuffer = byteBuffer.asIntBuffer();
+        intBuffer.put(intArray);
+
+        byte[] array = byteBuffer.array();
+
+//        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+//        image.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+//        byte[] imageBytes = baos.toByteArray();
+//        String encodedImage = Base64.encodeToString(imageBytes, Base64.DEFAULT);
+        return array;
     }
 
     @Override
     protected String doInBackground(String... strings) {
         String result = null;
-        try {
-            result=post1(strings[0],strings[1]);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        System.out.println("dd");
+
         return result;
     }
 

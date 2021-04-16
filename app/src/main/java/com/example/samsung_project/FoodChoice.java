@@ -28,7 +28,7 @@ import static java.lang.Thread.sleep;
 
 public class FoodChoice extends Fragment {
     Context context;
-    final List<String> dishes;
+    public List<String> dishes;
     public Bitmap bm;
     RecyclerView recyclerView;
 
@@ -37,9 +37,10 @@ public class FoodChoice extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         View view = inflater.inflate(R.layout.choice_dishes, container, false);
+        System.out.println(dishes);
         recyclerView = view.findViewById(R.id.recyclerViewForChoice);
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
-        recyclerView.setAdapter(new DishAdapter(dishes,context));
+        recyclerView.setAdapter(new DishAdapter(dishes,context,getActivity()));
 
         return view;
     }

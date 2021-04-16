@@ -117,8 +117,8 @@ public class FoodGridFragment extends Fragment {
                     try {
                         bitmap = MediaStore.Images.Media.getBitmap(context.getContentResolver(), selectedImage);
                         ImagePostReq image = new ImagePostReq();
-                        String req = image.PrepImage(bitmap);
-                        final String[] response = {null};
+                        byte[] req = image.PrepImage(bitmap);
+                        String[] response = {null};
 //                        API api = new API();
 //                        api.postimage(req,context);
                         Runnable task = () -> {

@@ -1,5 +1,6 @@
 package com.example.samsung_project.adapter;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.view.LayoutInflater;
@@ -11,20 +12,26 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.samsung_project.Navigation.NavigationHost;
 import com.example.samsung_project.Network.RecipeGet;
 import com.example.samsung_project.R;
+import com.example.samsung_project.RecipeFragment;
 
 import java.io.IOException;
+import java.util.Dictionary;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
 
 import static java.lang.Thread.sleep;
 
 public class DishAdapter extends RecyclerView.Adapter<DishAdapter.DishViewHolder> {
     List<String> dishesList;
+    Activity activity;
     LayoutInflater inflater;
     Bitmap bm;
 
-    public DishAdapter(List<String> dishes,Context context){
+    public DishAdapter(List<String> dishes,Context context,Activity activity){
+        this.activity = activity;
         this.dishesList = dishes;
         this.inflater = LayoutInflater.from(context);
     }
@@ -41,9 +48,7 @@ public class DishAdapter extends RecyclerView.Adapter<DishAdapter.DishViewHolder
         String url = "10.0.2.2";
         Runnable task = () -> {
             try {
-                System.out.println("here");
                 response[0] = imageGet.post_GetImage(url,req);
-                System.out.println(response[0]);
                 sleep(1000);
             } catch (IOException | InterruptedException e) {
                 e.printStackTrace();
@@ -67,7 +72,35 @@ public class DishAdapter extends RecyclerView.Adapter<DishAdapter.DishViewHolder
     @NonNull
     @Override
     public DishViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new DishViewHolder(inflater.inflate(R.layout.dishes_item,parent,false));
+        View view = inflater.inflate(R.layout.dishes_item, parent, false);
+        ImageView imageView = view.findViewById(R.id.image);
+        DishViewHolder dishViewHolder = new DishViewHolder(view);
+        imageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String req = dishViewHolder.getName().toString();
+                RecipeGet imageGet = new RecipeGet();
+                String url = "10.0.2.2";
+                List<Dictionary> response = null;
+                Runnable task = () -> {
+                    try {
+                        response.set(0, (imageGet.postRecipe(url, req)));
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                };
+                Thread thread = new Thread(task);
+                thread.start();
+                try {
+                    wait(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                Dictionary result = response.get(0);
+                ((NavigationHost) getActivity()).navigateTo(new RecipeFragment(result), false); // Navigate to the next Fragment
+            }
+        });
+        return new DishViewHolder(view);
     }
 
     @Override
@@ -91,5 +124,14 @@ public class DishAdapter extends RecyclerView.Adapter<DishAdapter.DishViewHolder
             imageView = itemView.findViewById(R.id.image);
             name = itemView.findViewById(R.id.name);
         }
+        public TextView getName(){
+            return name;
+        }
+    }
+    public void setActivity(Activity activity){
+        this.activity = activity;
+    }
+    public Activity getActivity() {
+        return activity;
     }
 }
