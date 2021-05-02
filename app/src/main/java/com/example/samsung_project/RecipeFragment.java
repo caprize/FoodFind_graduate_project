@@ -13,9 +13,10 @@ import androidx.fragment.app.Fragment;
 import com.google.gson.Gson;
 
 import java.util.Dictionary;
+import java.util.Map;
 
 public class RecipeFragment extends Fragment {
-    Dictionary dictionary;
+    Map map;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -24,7 +25,7 @@ public class RecipeFragment extends Fragment {
     }
 
 
-    public RecipeFragment(Dictionary dictionary){
-        this.dictionary = dictionary;
+    public RecipeFragment(Map map){
+        this.map = map;
     }
 }

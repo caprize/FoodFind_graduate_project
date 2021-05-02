@@ -16,11 +16,13 @@ import com.example.samsung_project.Navigation.NavigationHost;
 import com.example.samsung_project.Network.RecipeGet;
 import com.example.samsung_project.R;
 import com.example.samsung_project.RecipeFragment;
+import com.example.samsung_project.recipes.RecipeMap;
+
+import org.json.JSONException;
 
 import java.io.IOException;
-import java.util.Dictionary;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicReference;
+import java.util.Map;
 
 import static java.lang.Thread.sleep;
 
@@ -49,15 +51,14 @@ public class DishAdapter extends RecyclerView.Adapter<DishAdapter.DishViewHolder
         Runnable task = () -> {
             try {
                 response[0] = imageGet.post_GetImage(url,req);
-                sleep(1000);
-            } catch (IOException | InterruptedException e) {
+            } catch (IOException e) {
                 e.printStackTrace();
             }
         };
         Thread thread = new Thread(task);
         thread.start();
         try {
-            sleep(1000);
+            sleep(500);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -73,31 +74,41 @@ public class DishAdapter extends RecyclerView.Adapter<DishAdapter.DishViewHolder
     @Override
     public DishViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = inflater.inflate(R.layout.dishes_item, parent, false);
+
         ImageView imageView = view.findViewById(R.id.image);
+        TextView textView = view.findViewById(R.id.name);
         DishViewHolder dishViewHolder = new DishViewHolder(view);
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String req = dishViewHolder.getName().toString();
+                String req = textView.getText().toString();
                 RecipeGet imageGet = new RecipeGet();
                 String url = "10.0.2.2";
-                List<Dictionary> response = null;
+
+                String[] response = null;
+                RecipeMap[] recipeMap = {null};
+                parent.removeView(view);
                 Runnable task = () -> {
                     try {
-                        response.set(0, (imageGet.postRecipe(url, req)));
-                    } catch (IOException e) {
+                        recipeMap[0] =imageGet.postRecipe(url, req);
+                        ((NavigationHost) activity).navigateTo(new RecipeFragment(recipeMap[0].files), false); // Navigate to the next Fragment
+                    } catch (IOException | JSONException e) {
                         e.printStackTrace();
                     }
                 };
                 Thread thread = new Thread(task);
                 thread.start();
                 try {
-                    wait(1000);
+                    sleep(1000);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-                Dictionary result = response.get(0);
-                ((NavigationHost) getActivity()).navigateTo(new RecipeFragment(result), false); // Navigate to the next Fragment
+
+//                for (Map.Entry<String, RecipeFile> entry : recipeMap[0].files.entrySet()) {
+//                    System.out.println(entry.getKey());
+//                    System.out.println(entry.getValue().content);
+//                }
+
             }
         });
         return new DishViewHolder(view);

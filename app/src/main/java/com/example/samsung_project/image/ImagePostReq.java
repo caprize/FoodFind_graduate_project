@@ -58,8 +58,8 @@ public class ImagePostReq extends AsyncTask<String, Integer, String> {
         image.getPixels(intArray, 0, x,
                 0, 0, x, y);
         for (int i=0;i<x*y;i++){
-            intArray[i]=intArray[i] /(-200);
-            System.out.println(intArray[i]);
+            intArray[i]=intArray[i] ;
+
         }
         ByteBuffer byteBuffer = ByteBuffer.allocate(intArray.length * 4);
         IntBuffer intBuffer = byteBuffer.asIntBuffer();

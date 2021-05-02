@@ -125,7 +125,8 @@ public class FoodGridFragment extends Fragment {
                             try {
                                 response[0] = image.post1(url,req);
                                 res = response[0];
-                                ((NavigationHost) getActivity()).navigateTo(new FoodChoice(res,context), false);
+                                ((NavigationHost) getActivity()).navigateTo(new FoodChoice(res), false);
+
                             } catch (IOException e) {
                                 e.printStackTrace();
                             }

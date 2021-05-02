@@ -27,27 +27,35 @@ import java.util.List;
 import static java.lang.Thread.sleep;
 
 public class FoodChoice extends Fragment {
-    Context context;
     public List<String> dishes;
     public Bitmap bm;
     RecyclerView recyclerView;
-
+    View view;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        View view = inflater.inflate(R.layout.choice_dishes, container, false);
+        view = inflater.inflate(R.layout.choice_dishes, container, false);
         System.out.println(dishes);
         recyclerView = view.findViewById(R.id.recyclerViewForChoice);
-        recyclerView.setLayoutManager(new LinearLayoutManager(context));
-        recyclerView.setAdapter(new DishAdapter(dishes,context,getActivity()));
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        recyclerView.setAdapter(new DishAdapter(dishes,getContext(),getActivity()));
 
         return view;
     }
 
-    public FoodChoice(String dishes,Context context){
-        this.context = context;
+    public FoodChoice(String dishes){
         this.dishes = Arrays.asList(dishes.split("\\s"));;
+    }
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        if (view != null) {
+            ViewGroup parent = (ViewGroup) view.getParent();
+            if (parent != null) {
+                parent.removeAllViews();
+            }
+        }
     }
 
 }
