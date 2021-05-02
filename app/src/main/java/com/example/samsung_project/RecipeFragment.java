@@ -17,15 +17,17 @@ import java.util.Map;
 
 public class RecipeFragment extends Fragment {
     Map map;
-    @Nullable
+    String dish;
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.recipe,container);
+        View view = inflater.inflate(R.layout.recipe,container,false);
+
         return view;
     }
 
 
-    public RecipeFragment(Map map){
+    public RecipeFragment(Map map,String dish){
         this.map = map;
+        this.dish = dish;
     }
 }

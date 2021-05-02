@@ -26,13 +26,13 @@ import java.util.Map;
 
 import static java.lang.Thread.sleep;
 
-public class DishAdapter extends RecyclerView.Adapter<DishAdapter.DishViewHolder> {
+public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeViewHolder> {
     List<String> dishesList;
     Activity activity;
     LayoutInflater inflater;
     Bitmap bm;
 
-    public DishAdapter(List<String> dishes,Context context,Activity activity){
+    public RecipeAdapter(List<String> dishes, Context context, Activity activity){
         this.activity = activity;
         this.dishesList = dishes;
         this.inflater = LayoutInflater.from(context);
@@ -72,12 +72,12 @@ public class DishAdapter extends RecyclerView.Adapter<DishAdapter.DishViewHolder
 
     @NonNull
     @Override
-    public DishViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public RecipeViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = inflater.inflate(R.layout.dishes_item, parent, false);
 
         ImageView imageView = view.findViewById(R.id.image);
         TextView textView = view.findViewById(R.id.name);
-        DishViewHolder dishViewHolder = new DishViewHolder(view);
+        RecipeViewHolder recipeViewHolder = new RecipeViewHolder(view);
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -104,11 +104,11 @@ public class DishAdapter extends RecyclerView.Adapter<DishAdapter.DishViewHolder
 
             }
         });
-        return new DishViewHolder(view);
+        return new RecipeViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull DishViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull RecipeViewHolder holder, int position) {
         bm = getImage(position);
         holder.imageView.setImageBitmap(bm);
         holder.name.setText(dishesList.get(position));
@@ -119,11 +119,11 @@ public class DishAdapter extends RecyclerView.Adapter<DishAdapter.DishViewHolder
     public int getItemCount() {
         return 5;
     }
-    class DishViewHolder extends RecyclerView.ViewHolder{
+    class RecipeViewHolder extends RecyclerView.ViewHolder{
         ImageView imageView;
         TextView name;
 
-        public DishViewHolder(@NonNull View itemView) {
+        public RecipeViewHolder(@NonNull View itemView) {
             super(itemView);
             imageView = itemView.findViewById(R.id.image);
             name = itemView.findViewById(R.id.name);
