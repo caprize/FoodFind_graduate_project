@@ -3,6 +3,7 @@ package com.example.samsung_project.adapter;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -84,13 +85,13 @@ public class DishAdapter extends RecyclerView.Adapter<DishAdapter.DishViewHolder
                 String req = textView.getText().toString();
                 RecipeGet imageGet = new RecipeGet();
                 String url = "10.0.2.2";
-
+                Bitmap bitmap = ((BitmapDrawable)imageView.getDrawable()).getBitmap();
                 String[] response = null;
                 RecipeMap[] recipeMap = {null};
                 Runnable task = () -> {
                     try {
                         recipeMap[0] =imageGet.postRecipe(url, req);
-                        ((NavigationHost) activity).navigateTo(new RecipeFragment(recipeMap[0].files,req), false); // Navigate to the next Fragment
+                        ((NavigationHost) activity).navigateTo(new RecipeFragment(recipeMap[0].files,req,bitmap), false); // Navigate to the next Fragment
                     } catch (IOException | JSONException e) {
                         e.printStackTrace();
                     }
