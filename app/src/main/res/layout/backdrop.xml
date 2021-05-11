@@ -5,43 +5,31 @@
         style="@style/Widget.Button.TextButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/featured_label" />
+        android:text="History" />
 
     <com.google.android.material.button.MaterialButton
         style="@style/Widget.Button.TextButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/apartment_label" />
+        android:text="For You" />
 
     <com.google.android.material.button.MaterialButton
         style="@style/Widget.Button.TextButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/accessories_label" />
+        android:text="Trending" />
 
     <com.google.android.material.button.MaterialButton
         style="@style/Widget.Button.TextButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/shoes_label" />
+        android:text="Favorite" />
 
     <com.google.android.material.button.MaterialButton
         style="@style/Widget.Button.TextButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/tops_label" />
-
-    <com.google.android.material.button.MaterialButton
-        style="@style/Widget.Button.TextButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/bottoms_label" />
-
-    <com.google.android.material.button.MaterialButton
-        style="@style/Widget.Button.TextButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/dresses_label" />
+        android:text="Friends" />
 
     <View
         android:layout_width="56dp"

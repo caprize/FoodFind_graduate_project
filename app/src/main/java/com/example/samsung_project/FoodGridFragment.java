@@ -15,6 +15,7 @@ import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateDecelerateInterpolator;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -38,6 +39,7 @@ import static android.app.Activity.RESULT_OK;
 
 public class FoodGridFragment extends Fragment {
     static final int GALLERY_REQUEST = 1;
+    View view;
     public String res = null;
     public static final MediaType String = MediaType.get("application/string; charset=utf-8");
     private void setUpToolbar(View view) {
@@ -72,18 +74,19 @@ public class FoodGridFragment extends Fragment {
     public View onCreateView(
             @NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment with the ProductGrid theme
-        View view = inflater.inflate(R.layout.food_grid_fragment, container, false);
+        view = inflater.inflate(R.layout.food_grid_fragment, container, false);
         MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(getContext());
-        builder.setTitle("Важное сообщение!")
-                .setMessage("Покормите кота!")
-                .setPositiveButton("ОК, иду на кухню", new DialogInterface.OnClickListener() {
+        builder.setTitle("Справка")
+                .setMessage("Нажмите кнопку Image для того, чтобы прикрепить вашу фотографию")
+                .setPositiveButton("ОК", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         // Закрываем окно
                         dialog.cancel();
                     }
                 });
         builder.show();
-
+        ProgressBar progressBar = (ProgressBar) view.findViewById(R.id.progress_bar);
+        progressBar.setVisibility(ProgressBar.VISIBLE);
         // Set up the toolbar
         setUpToolbar(view);
 
@@ -123,9 +126,11 @@ public class FoodGridFragment extends Fragment {
 //                        api.postimage(req,context);
                         Runnable task = () -> {
                             try {
+
                                 response[0] = image.post1(url,req);
                                 res = response[0];
-                                ((NavigationHost) getActivity()).navigateTo(new FoodChoice(res), false);
+
+                                ((NavigationHost) getActivity()).navigateTo(new FoodChoice(res), true);
 
                             } catch (IOException e) {
                                 e.printStackTrace();

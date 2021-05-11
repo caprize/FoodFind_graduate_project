@@ -91,7 +91,7 @@ public class DishAdapter extends RecyclerView.Adapter<DishAdapter.DishViewHolder
                 Runnable task = () -> {
                     try {
                         recipeMap[0] =imageGet.postRecipe(url, req);
-                        ((NavigationHost) activity).navigateTo(new RecipeFragment(recipeMap[0].files,req,bitmap), false); // Navigate to the next Fragment
+                        ((NavigationHost) activity).navigateTo(new RecipeFragment(recipeMap[0].files,req,bitmap), true); // Navigate to the next Fragment
                     } catch (IOException | JSONException e) {
                         e.printStackTrace();
                     }
