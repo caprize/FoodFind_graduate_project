@@ -16,7 +16,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -31,7 +30,6 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 
 import java.io.IOException;
-import java.util.concurrent.Executor;
 
 import okhttp3.MediaType;
 
@@ -39,7 +37,9 @@ import static android.app.Activity.RESULT_OK;
 
 public class FoodGridFragment extends Fragment {
     static final int GALLERY_REQUEST = 1;
+    ProgressBar progressBar;
     View view;
+    static Bitmap bitmap=null;
     public String res = null;
     public static final MediaType String = MediaType.get("application/string; charset=utf-8");
     private void setUpToolbar(View view) {
@@ -85,11 +85,10 @@ public class FoodGridFragment extends Fragment {
                     }
                 });
         builder.show();
-        ProgressBar progressBar = (ProgressBar) view.findViewById(R.id.progress_bar);
-        progressBar.setVisibility(ProgressBar.VISIBLE);
+
         // Set up the toolbar
         setUpToolbar(view);
-
+        View view1 = view;
 
 
         MaterialButton imageButton = view.findViewById(R.id.image_button);
@@ -97,11 +96,14 @@ public class FoodGridFragment extends Fragment {
         imageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                progressBar = (ProgressBar) view1.findViewById(R.id.progress_bar);
+                progressBar.setVisibility(ProgressBar.VISIBLE);
                 Intent in = new   Intent(Intent.ACTION_GET_CONTENT,android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                 Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
                 photoPickerIntent.setType("image/*");
                 in.setType("image/*");
                 startActivityForResult(in, GALLERY_REQUEST);
+
             }
         });
         return view;
@@ -109,9 +111,6 @@ public class FoodGridFragment extends Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent imageReturnedIntent) {
         super.onActivityResult(requestCode, resultCode, imageReturnedIntent);
-
-        Bitmap bitmap = null;
-        String url = "10.0.2.2";
         Context context = getContext();
         switch(requestCode) {
             case GALLERY_REQUEST:
@@ -119,35 +118,33 @@ public class FoodGridFragment extends Fragment {
                     Uri selectedImage = imageReturnedIntent.getData();
                     try {
                         bitmap = MediaStore.Images.Media.getBitmap(context.getContentResolver(), selectedImage);
-                        ImagePostReq image = new ImagePostReq();
-                        byte[] req = image.PrepImage(bitmap);
-                        String[] response = {null};
-//                        API api = new API();
-//                        api.postimage(req,context);
-                        Runnable task = () -> {
-                            try {
-
-                                response[0] = image.post1(url,req);
-                                res = response[0];
-
-                                ((NavigationHost) getActivity()).navigateTo(new FoodChoice(res), true);
-
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
-                        };
-                        Thread thread = new Thread(task);
-                        thread.start();
-//                        new ImagePostReq().execute(url, req,response);
-
+                        onDestroy();
+                        getChoices();
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
-
                 }
         }
     }
+    public void getChoices(){
 
+        String url = "10.0.2.2";
 
+        ImagePostReq image = new ImagePostReq();
+        byte[] req = image.PrepImage(bitmap);
+        String[] response = {null};
+        Runnable task = () -> {
+            try {
+                response[0] = image.post1(url,req);
+                res = response[0];
+                ((NavigationHost) getActivity()).navigateTo(new FoodChoice(res), true);
+                //progressBar.setVisibility(ProgressBar.INVISIBLE);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        };
+        Thread thread = new Thread(task);
+        thread.start();
+    }
 }
 
